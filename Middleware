@@ -1,0 +1,26 @@
+// middleware/deleteLogger.js
+const DeletedLog = require('../models/DeletedLog');
+
+async function logDeletedDocument(req, res, next) {
+  // Зберігаємо початковий метод .json() для перехоплення відповіді
+  const originalJson = res.json;
+  
+  res.json = function(data) {
+    // Якщо це відповідь на DELETE і вона успішна
+    if (req.method === 'DELETE' && res.statusCode === 200 && data?.deletedDocument) {
+      const deletedDoc = data.deletedDocument;
+      
+      // Асинхронне збереження логу (не блокує відповідь)
+      DeletedLog.create({
+        documentId: deletedDoc._id,
+        documentType: deletedDoc.__t || deletedDoc.constructor.modelName || 'Product'
+      }).catch(err => console.error('Failed to save delete log:', err));
+    }
+    
+    originalJson.call(this, data);
+  };
+  
+  next();
+}
+
+module.exports = logDeletedDocument;
