@@ -1,0 +1,19 @@
+// models/DeletedLog.js
+const mongoose = require('mongoose');
+
+const deletedLogSchema = new mongoose.Schema({
+  documentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  documentType: {
+    type: String,
+    required: true      // назва моделі, наприклад "Product"
+  },
+  deletedAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+module.exports = mongoose.model('DeletedLog', deletedLogSchema);
