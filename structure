@@ -1,0 +1,10 @@
+lab4-mongoose/
+├── models/
+│   ├── Product.js
+│   └── DeletedLog.js
+├── middleware/
+│   └── deleteLogger.js
+├── routes/
+│   └── products.js
+├── app.js
+└── package.json
